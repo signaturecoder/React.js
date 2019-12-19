@@ -1,0 +1,167 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "uname": "sanu",
+      "email": "sanukmr333@gmail.com",
+      "password": "12345",
+      "address": "gaya",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "uname": "sunny",
+      "email": "findmyuser@gmail.com",
+      "password": "12345",
+      "address": "gaya",
+      "role": "staff"
+    }
+  ],
+  "flightList": [
+    {
+      "id": 1,
+      "flightId": "1a",
+      "flightName": "air-asia",
+      "flight_from": "kolkata",
+      "flight_to": "Delhi",
+      "start_time": "9:00",
+      "end_time": "11:00",
+      "wheelChair": true,
+      "infantFacility": true,
+      "meals": "North Indian",
+      "shopping_items": "Shoes"
+    },
+    {
+      "id": 2,
+      "flightId": "2a",
+      "flightName": "air-india",
+      "flight_from": "kolkata",
+      "flight_to": "Chennai",
+      "start_time": "1:00",
+      "end_time": "3:00",
+      "wheelChair": false,
+      "infantFacility": true,
+      "meals": "North Indian",
+      "shopping_items": "Shoes"
+    }
+  ],
+  "passengerList": [
+    {
+      "id": 1,
+      "flightId": "1a",
+      "pName": "Ravi Bhushan",
+      "passport": {
+        "passportNum": "T78IND",
+        "expiry_date": "22june2030"
+      },
+      "address": "Mindtree Limited, Global village Tech Park",
+      "dob": "22-06-1997",
+      "isChecked": true,
+      "wheelChair": true,
+      "infantFacility": false,
+      "seat_no": "E2",
+      "meals": "North Indian",
+      "shopping_items": "Shoes"
+    },
+    {
+      "id": 2,
+      "flightId": "1a",
+      "pName": "Shashi Bhushan",
+      "passport": {
+        "passportNum": "T89IND",
+        "expiry_date": "22JUNE2030"
+      },
+      "address": "Kolkata",
+      "dob": "22-06-1995",
+      "isChecked": false,
+      "wheelChair": false,
+      "infantFacility": false,
+      "seat_no": "E5",
+      "meals": "North Indian",
+      "shopping_items": "Bags"
+    },
+    {
+      "id": 3,
+      "flightId": "2a",
+      "pName": "Ravi Shankar",
+      "passport": {
+        "passportNum": "T88IND",
+        "expiry_date": "22JUNE2030"
+      },
+      "address": "Bengaluru",
+      "dob": "20-08-1997",
+      "isChecked": true,
+      "wheelChair": false,
+      "infantFacility": false,
+      "seat_no": "C6",
+      "meals": "North Indian",
+      "shopping_items": "Shoe"
+    },
+    {
+      "id": 4,
+      "flightId": "1a",
+      "pName": "Sunny Narayan",
+      "passport": {
+        "passportNum": "T90IND",
+        "expiry_date": "22JUNE2030"
+      },
+      "address": "Bihar",
+      "dob": "22-06-1997",
+      "isChecked": true,
+      "wheelChair": true,
+      "infantFacility": false,
+      "seat_no": "D3",
+      "meals": "",
+      "shopping_items": ""
+    },
+    {
+      "id": 5,
+      "flightId": "1a",
+      "pName": "Ravi Bhushan",
+      "passport": {
+        "passportNum": "T84IND",
+        "expiry_date": "22june2030"
+      },
+      "address": "Delhi",
+      "createdAt": 1575897767069,
+      "seat_no": "C2",
+      "isChecked": true,
+      "meals": "North Indian",
+      "shopping_items": "Shoes",
+      "wheelChair": true,
+      "infantFacility": true
+    },
+    {
+      "flightId": "1a",
+      "pName": "Ravi Bhushan",
+      "passport": {
+        "passportNum": "T80IND",
+        "expiry_date": "22june2030"
+      },
+      "address": "Mindtree Limited, Global village Tech Park",
+      "id": 6,
+      "seat_no": "E7",
+      "isChecked": true,
+      "meals": "North Indian",
+      "shopping_items": "Shoes",
+      "wheelChair": false,
+      "infantFacility": true
+    },
+    {
+      "flightId": "1a",
+      "pName": "Shashi Kumar",
+      "passport": {
+        "passportNum": "T82IND",
+        "expiry_date": "22june2030"
+      },
+      "address": "kolkata",
+      "id": 7,
+      "meals": "North Indian",
+      "shopping_items": "Shoes",
+      "wheelChair": true,
+      "infantFacility": true,
+      "seat_no": "C10",
+      "isChecked": true
+    }
+  ]
+}
