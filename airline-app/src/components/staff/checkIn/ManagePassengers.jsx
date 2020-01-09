@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import axios from 'axios';
-import { Button } from 'antd';
+import { Button, Checkbox } from 'antd';
 import { Link } from 'react-router-dom';
-
+import SeatDemo from './SeatDemo';
 import { AddToPaxSeatMap } from '../../../redux/actions/PassengerActions';
 class ManagePassengers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      passengers: [],
+      currentPaxList: [],
+      allPaxList: [],
+      flightId: '',
+      mealButtonClicked: false,
+      isChecked: false,
+      wheelChair: false,
+      infantFacility: false,
     };
   }
 
@@ -21,25 +27,32 @@ class ManagePassengers extends Component {
         `${process.env.REACT_APP_API_URL}/passengerList/?flightId=${this.props.match.params.id}`
       )
       .then(res => {
-        const passengers = res.data;
+        const currentPaxList = res.data;
 
         // getting all passengers having seat
-        let filteredPassengers = passengers
+        let passengersWithSeat = currentPaxList
           .filter(passenger => passenger.seat_no !== '')
           .map(passenger => {
             return {
               paxId: passenger.id,
               seatNo: this.getSeatNoFromSeatLocation(passenger.seat_no),
               wheelChair: passenger.wheelChair,
-              infantFacility: passenger.infantFacility
+              infantFacility: passenger.infantFacility,
             };
           });
-        filteredPassengers.map(item => {
-          const { paxId, seatNo, wheelChair, infantFacility} = item;
+        passengersWithSeat.map(item => {
+          const { paxId, seatNo, wheelChair, infantFacility } = item;
           this.props.addToPaxSeatMap(paxId, seatNo, wheelChair, infantFacility);
-        })
-        this.setState({ passengers });
+          return item;
+        });
+        this.setState({ currentPaxList, allPaxList: currentPaxList, flightId:this.props.match.params.id });
       });
+  }
+
+  componentDidUpdate(prevProps){
+    if (prevProps.match.params.id !== this.props.match.params.id){
+      this.setState({flightId:this.props.match.params.id});
+    }
   }
 
   getSeatNoFromSeatLocation = seatLocation => {
@@ -66,13 +79,45 @@ class ManagePassengers extends Component {
     return (row - 1) * 5 + col;
   };
 
+  handleCheckbox = e => {
+    let isChecked = this.state.isChecked;
+    let wheelChair = this.state.wheelChair;
+    let infantFacility = this.state.infantFacility;
+
+    const value = e.target.checked;
+    const name = e.target.name;
+    if (name === 'isChecked') {
+      isChecked = !this.state.isChecked;
+    } else if (name === 'wheelChair') {
+      wheelChair = !this.state.wheelChair;
+    } else if (name === 'infantFacility') {
+      infantFacility = !this.state.infantFacility;
+    }
+
+    this.setState({ [name]: value });
+
+    let filteredPaxList = this.state.allPaxList;
+
+    if (isChecked) {
+      filteredPaxList = filteredPaxList.filter(pax => pax.isChecked);
+    }
+    if (wheelChair) {
+      filteredPaxList = filteredPaxList.filter(pax => pax.wheelChair);
+    }
+    if (infantFacility) {
+      filteredPaxList = filteredPaxList.filter(pax => pax.infantFacility);
+    }
+    this.setState({ currentPaxList: filteredPaxList });
+  };
+
   renderPassengerTable() {
     const service = this.props.match.params.services;
-    return this.state.passengers.map((passenger, index) => {
+    return this.state.currentPaxList.map((passenger, index) => {
       const {
         id,
         flightId,
         pName,
+        isChecked,
         seat_no,
         meals,
         wheelChair,
@@ -83,39 +128,65 @@ class ManagePassengers extends Component {
         <tr key={index}>
           <td>{flightId}</td>
           <td>{pName}</td>
-          <td>{seat_no ? 'Yes' : 'No'}</td>
+          <td>{isChecked ? 'Yes' : 'No'}</td>
           <td>{seat_no}</td>
           <td>{meals}</td>
           <td>{shopping_items}</td>
           <td>{wheelChair ? 'Yes' : 'No'}</td>
           <td>{infantFacility ? 'Yes' : 'No'}</td>
-          <td>
-            {service ? (
+
+          {service ? (
+            <>
+              <td>
+                <Button>
+                  <Link to={`/staff/inFlight/flightServices/${id}`}>
+                    Add Services
+                  </Link>
+                </Button>
+              </td>
+            </>
+          ) : (
+            <td>
+              {' '}
               <Button>
-                <Link to={`/staff/inFlight/flightServices/${id}`}>
-                  Add Services
-                </Link>
-              </Button>
-            ) : (
-              <Button>
-                {/* <Link to={`/staff/checkIn/seatAllocation/${id}/${flightId}`}>
-                 Check In
-                </Link> */}
                 <Link to={`/staff/checkIn/seatMatrix/${id}/${flightId}`}>
                   Check In
                 </Link>
               </Button>
-            )}
-          </td>
+            </td>
+          )}
         </tr>
       );
     });
   }
+
   render() {
     const changeLabel = this.props.match.params.services;
     return (
       <>
         <h1> Manage Passenger List </h1>
+
+        <Checkbox
+          name="isChecked"
+          checked={this.state.isChecked}
+          onChange={this.handleCheckbox}
+        >
+          Check-in
+        </Checkbox>
+        <Checkbox
+          name="wheelChair"
+          checked={this.state.wheelChair}
+          onChange={this.handleCheckbox}
+        >
+          WheelChair
+        </Checkbox>
+        <Checkbox
+          name="infantFacility"
+          checked={this.state.infantFacility}
+          onChange={this.handleCheckbox}
+        >
+          InfantFacility
+        </Checkbox>
         <table className="passenger-table">
           <tbody>
             <tr>
@@ -127,11 +198,18 @@ class ManagePassengers extends Component {
               <th>Shopping Items</th>
               <th>wheelChair</th>
               <th>InfantFacility</th>
-              <th>{changeLabel ? 'Update Services' : 'Check in'}</th>
+              {changeLabel ? (
+                <>
+                  <th>Update Services</th>
+                </>
+              ) : (
+                <th>Check in</th>
+              )}
             </tr>
             {this.renderPassengerTable()}
           </tbody>
         </table>
+        {changeLabel ? <SeatDemo flightId={this.state.flightId} /> : <></>}
       </>
     );
   }

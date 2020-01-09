@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Button, Form, Input, message } from 'antd';
 import axios from 'axios';
-import { Form, Input, Button, message } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 export default class AddPassenger extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +12,7 @@ export default class AddPassenger extends Component {
         expiry_date: '',
       },
       address: '',
+      dob: '',
       issubmitted: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,23 +46,24 @@ export default class AddPassenger extends Component {
         passportNum: this.state.passport.passportNum,
         expiry_date: this.state.passport.expiry_date,
       },
+      dob: this.state.dob,
       address: this.state.address,
     };
     event.preventDefault();
+    
     axios
       .post(`${process.env.REACT_APP_API_URL}/passengerList`, passenger)
       .then(res => {
         this.setState({issubmitted: true});
+        this.props.addNewPassenger(passenger);
       });
     message.success('Successfully Passenger Added');
-
+  
     
   };
   render() {
     return (
       <>
-      {this.state.issubmitted ?<Redirect to="/admin/viewPassenger" /> : <></> }
-        <Link to="/admin/viewPassenger">View Passenger</Link>
         <Form
           onSubmit={this.handleSubmit}
           className="Add-Passenger-form"
@@ -103,6 +103,15 @@ export default class AddPassenger extends Component {
               name="expiry_date"
               placeholder="Enter Expiry Date "
               value={this.state.passport.expiry_date}
+              onChange={this.handleInputChange}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Input
+              type="text"
+              name="dob"
+              placeholder="Enter Date Of Birth "
+              value={this.state.dob}
               onChange={this.handleInputChange}
             />
           </Form.Item>

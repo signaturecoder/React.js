@@ -1,10 +1,15 @@
-import React, { Component } from 'react';
-import axios from 'axios';
 import { Button } from 'antd';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import React, { Component } from 'react';
+import AddServices from '../admin/AddServices';
+import ViewPassengerTable from '../admin/ViewPassenger';
 export default class FlightDetails extends Component {
   state = {
     flights: [],
+    visible: false,
+    flightId: '',
+    id: '',
+    buttonClicked:''
   };
 
   componentDidMount() {
@@ -14,6 +19,29 @@ export default class FlightDetails extends Component {
       this.setState({ flights });
     });
   }
+
+  managePassenger = (flightId,e) => {
+    this.setState({
+      buttonClicked : e.target.name
+    });
+    this.setState({ flightId: flightId });
+  };
+
+  updateFlightDetail = (id,e)=>{
+    this.setState({ id: id });
+    this.setState({buttonClicked : e.target.name})
+
+  }
+
+  renderPassengerTable() {
+    let flightId = this.state.flightId;
+    return (
+      <div>
+         <ViewPassengerTable flightId={flightId} />
+      </div>
+    );
+  }
+
   renderFlightTable() {
     return this.state.flights.map((flight, index) => {
       const {
@@ -34,24 +62,20 @@ export default class FlightDetails extends Component {
           <td>{wheelChair ? 'Yes' : 'No'}</td>
           <td>{infantFacility ? 'Yes' : 'No'}</td>
           <td>
-            <Button>
-              <Link to={'/admin/addPassenger'}>Manage</Link>
+            <Button name = 'manage' onClick={(e) => this.managePassenger(flightId, e)}>
+              Manage
             </Button>
           </td>
           <td>
-            <Button>
-              <Link to={'/admin/addServices/' + id}>Update</Link>
+            <Button name="update" onClick = {(e) =>this.updateFlightDetail(id, e)}>
+              Services
             </Button>
           </td>
-          {/* <td>
-            <Button>
-              <Link to={"/admin/addServices/" + _id}>Delete</Link>
-            </Button>
-          </td> */}
         </tr>
       );
     });
   }
+
   render() {
     return (
       <div>
@@ -67,11 +91,11 @@ export default class FlightDetails extends Component {
               <th>InfantFacility</th>
               <th>Manage Passengers</th>
               <th>Manage Services</th>
-              {/* <th>Delete Services</th> */}
             </tr>
             {this.renderFlightTable()}
           </tbody>
         </table>
+        {this.state.buttonClicked === '' ? <></> : this.state.buttonClicked === 'manage' ? this.renderPassengerTable() : <AddServices id={this.state.id}/> }
       </div>
     );
   }

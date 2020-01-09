@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Button, Form, Input, message } from 'antd';
 import axios from 'axios';
-import { Form, Input, Button, message } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 export default class EditPassenger extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +12,7 @@ export default class EditPassenger extends Component {
         expiry_date: '',
       },
       address: '',
+      dob:'',
       issubmitted: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,9 +39,9 @@ export default class EditPassenger extends Component {
   };
 
   handleSubmit = event => {
-    const {
-      match: { params },
-    } = this.props;
+    // const {
+    //   match: { params },
+    // } = this.props;
     const passenger = {
       flightId: this.state.flightId,
       pName: this.state.pName,
@@ -50,12 +49,13 @@ export default class EditPassenger extends Component {
         passportNum: this.state.passport.passportNum,
         expiry_date: this.state.passport.expiry_date,
       },
+      dob: this.state.dob,
       address: this.state.address,
     };
     event.preventDefault();
     axios
       .patch(
-        `${process.env.REACT_APP_API_URL}/passengerList/${params.id}`,
+        `${process.env.REACT_APP_API_URL}/passengerList/${this.props.paxId}`,
         passenger
       )
       .then(res => {
@@ -65,19 +65,13 @@ export default class EditPassenger extends Component {
   };
   render() {
     return (
-      <>
-        {this.state.issubmitted ? (
-          <Redirect to="/admin/viewPassenger" />
-        ) : (
-          <></>
-        )}
-        <Link to="/admin/viewPassenger">View Passenger</Link>
+      <> 
         <Form
           onSubmit={this.handleSubmit}
           className="Add-Passenger-form"
           style={{ maxWidth: '300px' }}
         >
-          <h3 style={{ color: 'Red' }}>Edit Passenger Form</h3>
+          <h3 style={{ color: 'Red' }}>Update Passenger Form</h3>
           <Form.Item>
             <Input
               type="text"
@@ -111,6 +105,15 @@ export default class EditPassenger extends Component {
               name="expiry_date"
               placeholder="Enter Expiry Date "
               value={this.state.passport.expiry_date}
+              onChange={this.handleInputChange}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Input
+              type="text"
+              name="dob"
+              placeholder="Enter Date Of Birth "
+              value={this.state.dob}
               onChange={this.handleInputChange}
             />
           </Form.Item>

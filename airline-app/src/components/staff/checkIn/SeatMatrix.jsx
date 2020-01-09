@@ -14,6 +14,7 @@ class SeatMatrix extends Component {
     this.state = {
       particularPassenger: {},
       seat_no: '',
+      isChecked: false,
     };
   }
 
@@ -38,6 +39,7 @@ class SeatMatrix extends Component {
   handleSeat = seatNo => {
     let finalSeat = '';
     const paxId = this.props.match.params.pid;
+
     const paxDetails = this.state.particularPassenger;
 
     if (
@@ -64,14 +66,17 @@ class SeatMatrix extends Component {
     let selectedPssenger = this.state.particularPassenger;
     if (finalSeat === '') {
       selectedPssenger.seat_no = '';
+      selectedPssenger.isChecked = false;
     } else {
       selectedPssenger.seat_no = this.calculateSeat(seatNo);
+      selectedPssenger.isChecked = true;
     }
     this.setState({ particularPassenger: selectedPssenger });
   };
 
   displaySeatMatrix = () => {
     const paxId = this.props.match.params.pid;
+
     let paxSeatMap = this.props.passengerSeatMap;
     let seatArray = Array(50).fill(null);
     for (let i = 0; i < paxSeatMap.length; i++) {
@@ -199,7 +204,7 @@ class SeatMatrix extends Component {
           <Col xs={24} lg={12}>
             <div className="seat-indicator">
               <Seat occupied="MODIFY" />
-              <b>Change Seat</b>
+              <b>Current Seat</b>
               <Seat occupied="BLOCKED" />
               <b>Booked</b>
               <Seat occupied="BLOCKED WITH WHEELCHAIR" />

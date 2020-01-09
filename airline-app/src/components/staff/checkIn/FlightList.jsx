@@ -19,7 +19,6 @@ class FlightList extends Component {
   }
 
   handlePassenger = () => {
-    console.log('PASSENGER');
     this.props.clearPaxSeatMap();
   };
 
@@ -44,6 +43,8 @@ class FlightList extends Component {
           <td>{end_time}</td>
           <td>
             {services ? (
+
+              // inFlight
               <Button>
                 <Link
                   to={`/staff/inFlight/managePassengers/${flightId}/${services}`}
@@ -51,7 +52,10 @@ class FlightList extends Component {
                   Manage
                 </Link>
               </Button>
+              
             ) : (
+
+               // checkIn
               <Button onClick={this.handlePassenger}>
                 <Link to={'/staff/checkIn/managePassengers/' + flightId}>
                   Manage

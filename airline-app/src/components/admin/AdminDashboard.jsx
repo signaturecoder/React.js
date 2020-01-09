@@ -4,8 +4,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import PassengerList from './PassengerList';
 import AddPassenger from './AddPassenger';
-import AddServices from './AddServices';
-import ViewPassenger from './ViewPassenger';
 import FlightDetails from '../flights/FlightsPage';
 import EditPassenger from './EditPassenger';
 const AdminDashboard = () => {
@@ -39,6 +37,7 @@ const AdminDashboard = () => {
               <Link to="/admin/flightList">Flight List</Link>
             </Menu.Item>
             <Menu.Item key="6">
+              {' '}
               <Button onClick={handleLogout}>
                 <Icon type="logout" />
                 Logout
@@ -71,8 +70,6 @@ const AdminDashboard = () => {
                 path="/admin/editPassenger/:id"
                 component={EditPassenger}
               />
-              <Route path="/admin/addServices/:id" component={AddServices} />
-              <Route path="/admin/viewPassenger/" component={ViewPassenger} />
               <Route path="/admin/flightList" component={FlightDetails} />
             </Switch>
           </div>

@@ -5,7 +5,6 @@ const FormDemo = () => {
   const [count, setCount] = useState(0);
   
   useEffect(() => {
-    console.log('first time');
     return () => {
         console.log('cleaning');
     }
@@ -17,7 +16,6 @@ const FormDemo = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('submitted');
   };
 
   const handleIncrement = () => {

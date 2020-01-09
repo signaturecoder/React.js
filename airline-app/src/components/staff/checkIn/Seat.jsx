@@ -22,6 +22,12 @@ const Seat = props => {
     case 'MODIFY':
       color = 'yellow';
       break;
+    case 'MEAL':
+      color = 'GREEN';
+      break;
+    case 'NO MEAL':
+      color = 'RED';
+      break;
 
     default:
       color = 'grey';
